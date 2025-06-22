@@ -9,6 +9,8 @@ on:
 jobs:
   daily-update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
@@ -55,7 +57,12 @@ jobs:
     
     - name: Push changes
       run: |
-        git push origin main || git push origin master
+        # Check if we're on main or master branch
+        BRANCH=$(git branch --show-current)
+        echo "Current branch: $BRANCH"
+        
+        # Push to the current branch
+        git push origin $BRANCH
       
     - name: Workflow completion notification
       run: |
